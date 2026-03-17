@@ -1,0 +1,87 @@
+{{> layout/header}}
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4>회원가입</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/join" method="post">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">아이디</label>
+                            <div class="input-group">
+                                <input type="text" name="username" class="form-control" id="username" placeholder="아이디를 입력하세요" required>
+                                <button type="button" class="btn btn-outline-primary" onclick="checkUsername()">중복체크</button>
+                            </div>
+                            <small id="username-msg" class="form-text mt-1 d-block"></small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">비밀번호</label>
+                            <input type="password" name="password" class="form-control" id="password" placeholder="비밀번호를 입력하세요" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">이메일</label>
+                            <input type="email" name="email" class="form-control" id="email" placeholder="이메일을 입력하세요" required>
+                        </div>
+                        <div class="d-grid mt-4">
+                            <button type="submit" id="join-btn" class="btn btn-primary btn-lg" disabled>가입하기</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center py-3">
+                    <small>이미 계정이 있으신가요? <a href="/login-form">로그인하기</a></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let isUsernameChecked = false;
+
+    async function checkUsername() {
+        const username = document.querySelector("#username").value;
+        const msgElement = document.querySelector("#username-msg");
+        const joinBtn = document.querySelector("#join-btn");
+
+        if (!username) {
+            msgElement.innerText = "아이디를 입력해주세요.";
+            msgElement.className = "form-text mt-1 d-block text-danger";
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/username-same-check?username=${username}`);
+            const result = await response.json();
+
+            if (result.status === 200) {
+                if (result.body === true) {
+                    msgElement.innerText = "사용 가능한 아이디입니다.";
+                    msgElement.className = "form-text mt-1 d-block text-success";
+                    isUsernameChecked = true;
+                    joinBtn.disabled = false;
+                }
+            } else {
+                msgElement.innerText = result.msg; // 중복된 아이디입니다.
+                msgElement.className = "form-text mt-1 d-block text-danger";
+                isUsernameChecked = false;
+                joinBtn.disabled = true;
+            }
+        } catch (error) {
+            console.error("Error checking username:", error);
+            msgElement.innerText = "중복 체크 중 오류가 발생했습니다.";
+            msgElement.className = "form-text mt-1 d-block text-danger";
+        }
+    }
+
+    // 아이디 입력값이 변경되면 중복 체크 초기화
+    document.querySelector("#username").addEventListener("input", function() {
+        isUsernameChecked = false;
+        document.querySelector("#join-btn").disabled = true;
+        document.querySelector("#username-msg").innerText = "";
+    });
+</script>
+
+{{> layout/footer}}

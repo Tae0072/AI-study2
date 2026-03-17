@@ -1,63 +1,11 @@
 {{> layout/header}}
 
-<div class="row">
-    <div class="col-md-8 mx-auto text-center py-5">
-        <h1 class="display-4 fw-bold mb-4">환영합니다! <span class="text-primary">AI 블로그</span>입니다.</h1>
-        <p class="lead text-muted mb-5">
-            이곳은 Spring Boot와 Mustache를 활용하여 구축된 샘플 블로그 서비스입니다.<br>
-            자유롭게 글을 작성하고 댓글을 남겨보세요.
-        </p>
-        
-        {{^sessionUser}}
-        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-            <a href="/user/join-form" class="btn btn-primary btn-lg px-4 gap-3">지금 시작하기</a>
-            <a href="/user/login-form" class="btn btn-outline-secondary btn-lg px-4">로그인하기</a>
-        </div>
-        {{/sessionUser}}
-        
-        {{#sessionUser}}
-        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-            <a href="/board/save-form" class="btn btn-primary btn-lg px-4 gap-3">글쓰러 가기</a>
-            <a href="/" class="btn btn-outline-secondary btn-lg px-4">게시글 보기</a>
-        </div>
-        {{/sessionUser}}
-    </div>
-</div>
-
-<hr class="my-5">
-
-<div class="row g-4">
-    <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm p-3" style="border-radius: var(--border-radius);">
-            <div class="card-body">
-                <div class="mb-3">
-                    <span class="badge bg-primary-subtle text-primary p-2">Feature 01</span>
-                </div>
-                <h5 class="card-title fw-bold">빠른 속도</h5>
-                <p class="card-text text-muted small">SSR(Server Side Rendering) 방식으로 최적화된 성능을 제공합니다.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm p-3" style="border-radius: var(--border-radius);">
-            <div class="card-body">
-                <div class="mb-3">
-                    <span class="badge bg-success-subtle text-success p-2">Feature 02</span>
-                </div>
-                <h5 class="card-title fw-bold">반응형 디자인</h5>
-                <p class="card-text text-muted small">모바일과 데스크톱 어디서든 최적의 경험을 제공합니다.</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100 border-0 shadow-sm p-3" style="border-radius: var(--border-radius);">
-            <div class="card-body">
-                <div class="mb-3">
-                    <span class="badge bg-info-subtle text-info p-2">Feature 03</span>
-                </div>
-                <h5 class="card-title fw-bold">편리한 UI</h5>
-                <p class="card-text text-muted small">누구나 쉽게 사용할 수 있는 직관적인 사용자 인터페이스를 갖추었습니다.</p>
-            </div>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>메인 페이지</h1>
+            <hr>
+            <p>블로그 서비스에 오신 것을 환영합니다.</p>
         </div>
     </div>
 </div>
