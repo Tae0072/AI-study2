@@ -21,11 +21,11 @@
 
 ## Phase 2: 회원 인증 시스템 (Membership System)
 
-- [ ] **T-2.1 회원가입 기능 및 화면 구현**
-  - [ ] `frontend-design` 스킬을 활용한 회원가입 폼 (`join-form.mustache`) 구현
-  - [ ] `UserRequest.JoinDTO` 구현 및 유효성 검사 적용
-  - [ ] 아이디 중복 체크 API 구현 및 서비스 로직 작성
-  - [ ] 비밀번호 암호화 저장 처리 (BCrypt 적용 권장)
+- [x] **T-2.1 회원가입 기능 및 화면 구현**
+  - [x] `frontend-design` 스킬을 활용한 회원가입 폼 (`join-form.mustache`) 구현
+  - [x] `UserRequest.JoinDTO` 구현 및 유효성 검사 적용
+  - [x] 아이디 중복 체크 API 구현 및 서비스 로직 작성
+  - [x] 비밀번호 암호화 저장 처리 (BCrypt 적용 권장)
 - [ ] **T-2.2 로그인/로그아웃 기능 및 화면 구현**
   - [ ] `frontend-design` 스킬을 활용한 로그인 폼 (`login-form.mustache`) 구현
   - [ ] `UserRequest.LoginDTO` 구현
@@ -70,12 +70,12 @@
 
 ## Phase 5: 예외 처리 및 안정화 (Polishing & Validation)
 
-- [ ] **T-5.1 글로벌 예외 처리 (GlobalExceptionHandler)**
-  - [ ] `@ControllerAdvice`를 이용한 공통 에러 페이지 처리
-  - [ ] REST API 에러 응답(`Resp.fail`) 처리 로직 강화
-- [ ] **T-5.2 데이터 유효성 검사 (Bean Validation)**
-  - [ ] 모든 Request DTO에 `@NotBlank`, `@Size` 등 제약 조건 적용
-  - [ ] BindingResult를 이용한 에러 메시지 사용자 노출
+- [x] **T-5.1 글로벌 예외 처리 (GlobalExceptionHandler)**
+  - [x] `@ControllerAdvice`를 이용한 공통 에러 페이지 처리
+  - [x] REST API 에러 응답(`Resp.fail`) 처리 로직 강화
+- [x] **T-5.2 데이터 유효성 검사 (Bean Validation)**
+  - [x] 모든 Request DTO에 `@NotBlank`, `@Size` 등 제약 조건 적용
+  - [x] BindingResult를 이용한 에러 메시지 사용자 노출 (AOP 적용)
 - [ ] **T-5.3 통합 테스트 및 최종 검수**
   - [ ] 주요 시나리오(회원가입 -> 글쓰기 -> 댓글 -> 탈퇴) 테스트
   - [ ] 성능 병목 구간(N+1 문제 등) 확인 및 해결

@@ -8,18 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo._core.utils.Resp;
 
-import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
-
 @RestController
 public class UserApiController {
 
     private final UserService userService;
-    private final HttpSession session;
 
-    public UserApiController(UserService userService, HttpSession session) {
+    public UserApiController(UserService userService) {
         this.userService = userService;
-        this.session = session;
     }
 
     @GetMapping("/api/username-same-check")
