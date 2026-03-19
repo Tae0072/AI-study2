@@ -35,12 +35,12 @@ public class UserService {
         User user = userRepository.findByUsername(loginDTO.getUsername())
                 .orElseThrow(() -> new Exception400("아이디가 존재하지 않습니다."));
 
-        // data.sql의 비밀번호는 평문일 수 있으므로 두 가지 경우 모두 체크
-        if (BCrypt.checkpw(loginDTO.getPassword(), user.getPassword()) || loginDTO.getPassword().equals(user.getPassword())) {
-            return user;
-        } else {
+        // BCrypt 비교
+        if (!BCrypt.checkpw(loginDTO.getPassword(), user.getPassword())) {
             throw new Exception400("비밀번호가 틀렸습니다.");
         }
+
+        return user;
     }
 
     public boolean usernameSameCheck(String username) {

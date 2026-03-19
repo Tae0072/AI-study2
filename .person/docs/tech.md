@@ -1,7 +1,7 @@
 # 기술 명세서 (tech.md)
 
 ## 1. 백엔드 (Backend)
-- **Framework**: Spring Boot 3.3.4
+- **Framework**: Spring Boot 4.0.3
 - **Language**: Java 21 (v21)
 - **Build Tool**: Gradle
 - **Authentication**: 서버 세션 방식 (HttpSession 활용)

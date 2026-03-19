@@ -26,11 +26,11 @@
   - [x] `UserRequest.JoinDTO` 구현 및 유효성 검사 적용
   - [x] 아이디 중복 체크 API 구현 및 서비스 로직 작성
   - [x] 비밀번호 암호화 저장 처리 (BCrypt 적용 권장)
-- [ ] **T-2.2 로그인/로그아웃 기능 및 화면 구현**
-  - [ ] `frontend-design` 스킬을 활용한 로그인 폼 (`login-form.mustache`) 구현
-  - [ ] `UserRequest.LoginDTO` 구현
-  - [ ] 세션(`HttpSession`)을 이용한 인증 정보 관리
-  - [ ] 로그인 성공/실패 시나리오 대응 및 리다이렉션 처리
+- [x] **T-2.2 로그인/로그아웃 기능 및 화면 구현**
+  - [x] `frontend-design` 스킬을 활용한 로그인 폼 (`login-form.mustache`) 구현
+  - [x] `UserRequest.LoginDTO` 구현
+  - [x] 세션(`HttpSession`)을 이용한 인증 정보 관리
+  - [x] 로그인 성공/실패 시나리오 대응 및 리다이렉션 처리
 - [ ] **T-2.3 회원 탈퇴 및 마이페이지 화면 구현**
   - [ ] `frontend-design` 스킬을 활용한 회원 정보 수정 화면 (`update-form.mustache`) 구현
   - [ ] 회원 탈퇴 API 구현
