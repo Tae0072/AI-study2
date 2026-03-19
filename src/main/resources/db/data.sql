@@ -1,3 +1,7 @@
+-- H2 DB 접속용 사용자 생성 (관리자 권한 부여)
+CREATE USER IF NOT EXISTS "ssar" PASSWORD '1234' ADMIN;
+CREATE USER IF NOT EXISTS "cos" PASSWORD '1234' ADMIN;
+
 -- 유저 더미 데이터
 INSERT INTO user_tb (username, password, created_at) VALUES ('ssar', '1234', NOW());
 INSERT INTO user_tb (username, password, created_at) VALUES ('cos', '1234', NOW());
