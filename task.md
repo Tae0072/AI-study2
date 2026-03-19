@@ -15,9 +15,9 @@
 - [x] **T-1.4 H2 및 JPA 환경 설정**
   - [x] `application.properties` 설정 (H2 Console, Hibernate Logging)
   - [x] 초기 데이터 구성을 위한 `data.sql` 작성
-- [ ] **T-1.5 공통 화면 레이아웃 구성**
-  - [ ] `frontend-design` 스킬을 활용하여 `header.mustache`, `footer.mustache` 파일 작성 및 공통화 적용
-  - [ ] Bootstrap 등을 활용한 기본 레이아웃 템플릿 구조화
+- [x] **T-1.5 공통 화면 레이아웃 구성**
+  - [x] `frontend-design` 스킬을 활용하여 `header.mustache`, `footer.mustache` 파일 작성 및 공통화 적용
+  - [x] Bootstrap 등을 활용한 기본 레이아웃 템플릿 구조화
 
 ## Phase 2: 회원 인증 시스템 (Membership System)
 
@@ -31,10 +31,10 @@
   - [x] `UserRequest.LoginDTO` 구현
   - [x] 세션(`HttpSession`)을 이용한 인증 정보 관리
   - [x] 로그인 성공/실패 시나리오 대응 및 리다이렉션 처리
-- [ ] **T-2.3 회원 탈퇴 및 마이페이지 화면 구현**
-  - [ ] `frontend-design` 스킬을 활용한 회원 정보 수정 화면 (`update-form.mustache`) 구현
-  - [ ] 회원 탈퇴 API 구현
-  - [ ] 탈퇴 시 해당 사용자가 작성한 게시글 및 댓글 일괄 처리 (Soft delete 또는 Cascade delete 전략 결정)
+- [x] **T-2.3 회원 탈퇴 및 마이페이지 화면 구현**
+  - [x] `frontend-design` 스킬을 활용한 회원 정보 수정 화면 (`update-form.mustache`) 구현
+  - [x] 회원 탈퇴 API 구현
+  - [x] 탈퇴 시 해당 사용자가 작성한 게시글 및 댓글 일괄 처리 (Soft delete 또는 Cascade delete 전략 결정)
 - [ ] **T-2.4 권한 관리 및 보안**
   - [ ] 인증이 필요한 페이지 접근 제어를 위한 Interceptor 구현
   - [ ] 세션 체크 로직 공통화

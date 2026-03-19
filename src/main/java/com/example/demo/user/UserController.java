@@ -1,5 +1,6 @@
 package com.example.demo.user;
 
+import com.example.demo._core.handler.ex.Exception401;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import com.example.demo.user.UserRequest.JoinDTO;
 import com.example.demo.user.UserRequest.LoginDTO;
+import com.example.demo.user.UserRequest.UpdateDTO;
 
 @Controller
 public class UserController {
@@ -46,6 +48,38 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout() {
+        session.invalidate();
+        return "redirect:/";
+    }
+
+    @GetMapping("/user/update-form")
+    public String updateForm(org.springframework.ui.Model model) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) {
+            throw new Exception401("로그인이 필요합니다.");
+        }
+        model.addAttribute("user", new UserResponse.UpdateFormDTO(sessionUser));
+        return "user/update-form";
+    }
+
+    @PostMapping("/user/update")
+    public String update(@Valid UserRequest.UpdateDTO updateDTO, BindingResult bindingResult) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) {
+            throw new Exception401("로그인이 필요합니다.");
+        }
+        User user = userService.회원정보수정(sessionUser.getId(), updateDTO);
+        session.setAttribute("sessionUser", user);
+        return "redirect:/";
+    }
+
+    @PostMapping("/user/withdraw")
+    public String withdraw() {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        if (sessionUser == null) {
+            throw new Exception401("로그인이 필요합니다.");
+        }
+        userService.회원탈퇴(sessionUser.getId());
         session.invalidate();
         return "redirect:/";
     }

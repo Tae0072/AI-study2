@@ -3,6 +3,7 @@
 사용기술 : mustache, h2, jpa, security 사용안함
 http메서드 : get, post만 사용하여 구현한다. *ApiController는 ajax가 필요 할때만 사용한다.
 http요청 방법 : form태그 사용. x-www-form-urlencoded 사용.
+*Service.java의 메서드명은 반드시 한글로 작성한다.
 
 ## 1. 자동 동기화 (최우선 실행)
 

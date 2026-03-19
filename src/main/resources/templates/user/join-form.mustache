@@ -25,6 +25,30 @@
                             <label for="email" class="form-label">이메일</label>
                             <input type="email" name="email" class="form-control" id="email" placeholder="이메일을 입력하세요" required>
                         </div>
+
+                        <hr class="my-4">
+                        <h5 class="mb-3">주소 정보 (선택)</h5>
+                        
+                        <div class="mb-3">
+                            <label for="postcode" class="form-label">우편번호</label>
+                            <div class="input-group">
+                                <input type="text" name="postcode" id="postcode" class="form-control" placeholder="우편번호" readonly>
+                                <button type="button" class="btn btn-outline-secondary" onclick="execDaumPostcode()">우편번호 찾기</button>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">주소</label>
+                            <input type="text" name="address" id="address" class="form-control" placeholder="주소" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="detailAddress" class="form-label">상세주소</label>
+                            <input type="text" name="detailAddress" id="detailAddress" class="form-control" placeholder="상세주소">
+                        </div>
+                        <div class="mb-3">
+                            <label for="extraAddress" class="form-label">참고항목</label>
+                            <input type="text" name="extraAddress" id="extraAddress" class="form-control" placeholder="참고항목" readonly>
+                        </div>
+
                         <div class="d-grid mt-4">
                             <button type="submit" id="join-btn" class="btn btn-primary btn-lg" disabled>가입하기</button>
                         </div>
@@ -38,6 +62,7 @@
     </div>
 </div>
 
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
     let isUsernameChecked = false;
 
@@ -57,17 +82,17 @@
             const result = await response.json();
 
             if (result.status === 200) {
-                if (result.body === true) {
+                if (result.body === false) { // 중복되지 않음
                     msgElement.innerText = "사용 가능한 아이디입니다.";
                     msgElement.className = "form-text mt-1 d-block text-success";
                     isUsernameChecked = true;
                     joinBtn.disabled = false;
+                } else {
+                    msgElement.innerText = "이미 사용 중인 아이디입니다.";
+                    msgElement.className = "form-text mt-1 d-block text-danger";
+                    isUsernameChecked = false;
+                    joinBtn.disabled = true;
                 }
-            } else {
-                msgElement.innerText = result.msg; // 중복된 아이디입니다.
-                msgElement.className = "form-text mt-1 d-block text-danger";
-                isUsernameChecked = false;
-                joinBtn.disabled = true;
             }
         } catch (error) {
             console.error("Error checking username:", error);
@@ -76,12 +101,45 @@
         }
     }
 
-    // 아이디 입력값이 변경되면 중복 체크 초기화
     document.querySelector("#username").addEventListener("input", function() {
         isUsernameChecked = false;
         document.querySelector("#join-btn").disabled = true;
         document.querySelector("#username-msg").innerText = "";
     });
+
+    function execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                var addr = '';
+                var extraAddr = '';
+
+                if (data.userSelectedType === 'R') {
+                    addr = data.roadAddress;
+                } else {
+                    addr = data.jibunAddress;
+                }
+
+                if(data.userSelectedType === 'R'){
+                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                        extraAddr += data.bname;
+                    }
+                    if(data.buildingName !== '' && data.apartment === 'Y'){
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    if(extraAddr !== ''){
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                    document.getElementById("extraAddress").value = extraAddr;
+                } else {
+                    document.getElementById("extraAddress").value = '';
+                }
+
+                document.getElementById('postcode').value = data.zonecode;
+                document.getElementById("address").value = addr;
+                document.getElementById("detailAddress").focus();
+            }
+        }).open();
+    }
 </script>
 
 {{> layout/footer}}
