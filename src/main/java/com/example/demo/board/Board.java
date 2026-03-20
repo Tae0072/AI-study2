@@ -25,24 +25,25 @@ import lombok.NoArgsConstructor;
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String title;
-    private String content;
+    private Integer id; // 게시글 번호
+    private String title; // 제목
+    private String content; // 내용
 
     // RULE: 모든 연관관계는 Lazy로 한다. OSIV는 false이다.
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    private User user; // 작성자
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt; // 작성일
+
 
     @Builder
     public Board(Integer id, String title, String content, User user, LocalDateTime createdAt) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.user = user;
-        this.createdAt = createdAt;
+        this.id = id; // 게시글 번호
+        this.title = title; // 제목
+        this.content = content; // 내용
+        this.user = user; // 작성자
+        this.createdAt = createdAt; // 작성일
     }
 
 }

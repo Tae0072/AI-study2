@@ -7,6 +7,8 @@ http요청 방법 : form태그 사용. x-www-form-urlencoded 사용.
 model에 데이터를 담을때 규칙(a,b참고)
 a: model.addAttribute("model", 오브젝트);
 b: model.addAttribute("models", 컬렉션);
+작업진행할때 작업 내용을 한글로 보여주고, 권한 물어 볼때도 한글로 작업한다.
+작업한 코드들은 상세한 주석을 추가하여 작성한다.
 
 ## 1. 자동 동기화 (최우선 실행)
 
