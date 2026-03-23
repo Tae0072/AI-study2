@@ -28,4 +28,22 @@ public class BoardResponse {
     public static class Detail {
 
     }
+
+    // 페이징 정보를 담는 DTO
+    @Data
+    public static class PaginationDTO {
+        private boolean isFirst; // 첫 페이지 여부
+        private boolean isLast;  // 마지막 페이지 여부
+        private int prevPage;    // 이전 페이지 번호
+        private int nextPage;    // 다음 페이지 번호
+        private int currentPage; // 현재 페이지 번호
+
+        public PaginationDTO(boolean isFirst, boolean isLast, int prevPage, int nextPage, int currentPage) {
+            this.isFirst = isFirst;
+            this.isLast = isLast;
+            this.prevPage = prevPage;
+            this.nextPage = nextPage;
+            this.currentPage = currentPage;
+        }
+    }
 }

@@ -37,4 +37,4 @@ echo '{"tool_name":"Skill","tool_input":{"skill":"<스킬명>"}}' | bash .ai/hoo
 
 ## 4. AI-CONTEXT
 
-코드 작업 전 해당 디렉토리에 `AI-CONTEXT.md`가 있으면 먼저 읽어라.
+

@@ -21,6 +21,24 @@
             {{/models}}
         </tbody>
     </table>
+
+    <!-- 페이징 UI -->
+    <ul class="pagination justify-content-center">
+        <!-- 이전 버튼 -->
+        <li class="page-item {{#model.isFirst}}disabled{{/model.isFirst}}">
+            <a class="page-link" href="?page={{model.prevPage}}">이전</a>
+        </li>
+
+        <!-- 현재 페이지 표시 (Step 3 기초) -->
+        <li class="page-item active">
+            <span class="page-link">{{model.currentPage}}</span>
+        </li>
+
+        <!-- 다음 버튼 -->
+        <li class="page-item {{#model.isLast}}disabled{{/model.isLast}}">
+            <a class="page-link" href="?page={{model.nextPage}}">다음</a>
+        </li>
+    </ul>
 </div>
 
 {{> layout/footer}}
