@@ -11,32 +11,48 @@
             </tr>
         </thead>
         <tbody>
-            {{#models}}
+            {{#model.boardList}}
             <tr>
                 <td>{{id}}</td>
                 <td>{{title}}</td>
                 <td>{{username}}</td>
                 <td>{{createdAt}}</td>
             </tr>
-            {{/models}}
+            {{/model.boardList}}
         </tbody>
     </table>
 
     <!-- 페이징 UI -->
     <ul class="pagination justify-content-center">
         <!-- 이전 버튼 -->
-        <li class="page-item {{#model.isFirst}}disabled{{/model.isFirst}}">
-            <a class="page-link" href="?page={{model.prevPage}}">이전</a>
+        <li class="page-item {{#model.pagination.isFirst}}disabled{{/model.pagination.isFirst}}">
+            <a class="page-link" href="?page={{model.pagination.prevPage}}">이전</a>
         </li>
 
-        <!-- 현재 페이지 표시 (Step 3 기초) -->
-        <li class="page-item active">
-            <span class="page-link">{{model.currentPage}}</span>
+        <!-- 앞쪽 ... 표시 -->
+        {{#model.pagination.showPrevDots}}
+        <li class="page-item disabled">
+            <span class="page-link">...</span>
         </li>
+        {{/model.pagination.showPrevDots}}
+
+        <!-- 페이지 번호 목록 -->
+        {{#model.pagination.pageNumbers}}
+        <li class="page-item {{#isCurrent}}active{{/isCurrent}}">
+            <a class="page-link" href="?page={{number}}">{{number}}</a>
+        </li>
+        {{/model.pagination.pageNumbers}}
+
+        <!-- 뒤쪽 ... 표시 -->
+        {{#model.pagination.showNextDots}}
+        <li class="page-item disabled">
+            <span class="page-link">...</span>
+        </li>
+        {{/model.pagination.showNextDots}}
 
         <!-- 다음 버튼 -->
-        <li class="page-item {{#model.isLast}}disabled{{/model.isLast}}">
-            <a class="page-link" href="?page={{model.nextPage}}">다음</a>
+        <li class="page-item {{#model.pagination.isLast}}disabled{{/model.pagination.isLast}}">
+            <a class="page-link" href="?page={{model.pagination.nextPage}}">다음</a>
         </li>
     </ul>
 </div>

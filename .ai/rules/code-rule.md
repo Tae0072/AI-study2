@@ -40,6 +40,7 @@ com.example.demo/
 - REST는 `Resp.ok()` 또는 `Resp.fail()`을 사용한다.
 
 ## 6. DTO Rules
+- 모든 요청 데이터(`Request`)와 응답 데이터(`Response`)는 반드시 DTO를 거쳐서 컨트롤러에 전달되어야 한다.
 - 파일명 형식: `{Domain}Request.java`, `{Domain}Response.java`
 - 내부 클래스를 활용하여 static class로 선언한다.
 - Request 클래스명은 기능명(Save, Update, Login, Join)을 사용한다.

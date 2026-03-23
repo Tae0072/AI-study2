@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 
 import com.example.demo._core.handler.ex.Exception400;
 import org.springframework.ui.Model;
-import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -26,18 +25,11 @@ public class BoardController {
             throw new Exception400("잘못된 페이지 번호입니다.");
         }
 
-        // 2. 게시글 목록 보기 (서비스에는 0-based 인덱스 전달)
-        List<BoardResponse.ListDTO> boardList = boardService.게시글목록보기(page - 1);
-        
-        // 3. 페이징 상태 계산 (Step 3 기초 로직)
-        boolean isFirst = (page == 1); // 첫 페이지 여부
-        boolean isLast = (boardList.size() < 3); // 마지막 페이지 여부 (3개 미만이면 마지막)
-        int prevPage = page - 1; // 이전 페이지 번호
-        int nextPage = page + 1; // 다음 페이지 번호
+        // 2. 서비스에서 화면에 필요한 모든 데이터를 통합 DTO로 받기 (서비스에는 0-based 인덱스 전달)
+        BoardResponse.ListPageDTO listPageDTO = boardService.게시글목록보기(page - 1);
 
-        // 4. 모델에 데이터 담기 (프로젝트 규칙 준수)
-        model.addAttribute("models", boardList); // Rule b: 컬렉션
-        model.addAttribute("model", new BoardResponse.PaginationDTO(isFirst, isLast, prevPage, nextPage, page)); // Rule a: 오브젝트
+        // 3. 모델에 데이터 한 번만 담기
+        model.addAttribute("model", listPageDTO);
 
         return "board/list"; // 게시글 목록 페이지로 이동
     }
