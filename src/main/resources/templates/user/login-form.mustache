@@ -1,33 +1,168 @@
 {{> layout/header}}
 
-<div class="container my-5">
+<!-- ──────────── ⚡ OVERDRIVE ASSETS ───────────── -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<div class="container my-5 overflow-hidden">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white text-center py-3">
-                    <h4 class="mb-0">로그인</h4>
+            <!-- Overdrive: ID 부여 및 초기 투명도 설정 -->
+            <div id="login-card" class="card shadow-lg border-0" style="opacity: 0; transform: translateY(100px);">
+                <div class="card-header bg-primary text-white text-center py-4 border-bottom-0 rounded-top">
+                    <div class="mb-3">
+                        <i class="fa-solid fa-circle-user fa-3x" id="user-icon"></i>
+                    </div>
+                    <h4 class="mb-0 fw-bold">환영합니다</h4>
                 </div>
-                <div class="card-body p-4">
-                    <form action="/login" method="post">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">아이디</label>
-                            <input type="text" name="username" class="form-control" id="username" placeholder="아이디를 입력하세요" required>
+                <div class="card-body p-4 pt-5">
+                    <form id="login-form" action="/login" method="post" novalidate>
+                        <div class="mb-4 position-relative overflow-hidden group">
+                            <label for="username" class="form-label text-secondary small fw-bold">아이디</label>
+                            <input type="text" name="username" class="form-control form-control-lg border-0 bg-light spring-input" id="username" placeholder="아이디를 입력하세요" required>
+                            <div class="focus-line"></div>
                         </div>
-                        <div class="mb-4">
-                            <label for="password" class="form-label">비밀번호</label>
-                            <input type="password" name="password" class="form-control" id="password" placeholder="비밀번호를 입력하세요" required>
+                        <div class="mb-5 position-relative overflow-hidden group">
+                            <label for="password" class="form-label text-secondary small fw-bold">비밀번호</label>
+                            <input type="password" name="password" class="form-control form-control-lg border-0 bg-light spring-input" id="password" placeholder="비밀번호를 입력하세요" required>
+                            <div class="focus-line"></div>
                         </div>
-                        <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg">로그인</button>
+                        <div class="d-grid mb-3">
+                            <button type="submit" id="login-btn" class="btn btn-primary btn-lg fw-bold shadow-sm">
+                                <span>로그인</span>
+                            </button>
                         </div>
                     </form>
                 </div>
                 <div class="card-footer text-center bg-transparent border-0 pb-4">
-                    <small class="text-secondary">계정이 없으신가요? <a href="/join-form" class="text-decoration-none">회원가입</a></small>
+                    <small class="text-secondary">계정이 없으신가요? <a href="/join-form" class="text-decoration-none fw-bold text-primary">회원가입</a></small>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- ──────────── ⚡ OVERDRIVE PHYSICS SCRIPT ───────────── -->
+<style>
+    /* 입력창 포커스 시 흐르는 라인 효과 */
+    .focus-line {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: var(--bs-primary);
+        transform: scaleX(0);
+        transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+        transform-origin: center;
+    }
+    .spring-input:focus ~ .focus-line {
+        transform: scaleX(1);
+    }
+    
+    .spring-input {
+        transition: background-color 0.3s ease;
+    }
+    .spring-input:focus {
+        background-color: #fff !important;
+        box-shadow: none;
+    }
+
+    #login-card {
+        border-radius: 1.5rem;
+    }
+    .card-header {
+        background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const card = document.querySelector('#login-card');
+        const icon = document.querySelector('#user-icon');
+        const inputs = document.querySelectorAll('.spring-input');
+        const btn = document.querySelector('#login-btn');
+        const form = document.querySelector('#login-form');
+
+        // 1. 바운시 엔트런스 (Spring Entrance)
+        gsap.to(card, {
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: "elastic.out(1, 0.5)", // 찰진 스프링 이징
+            delay: 0.2
+        });
+
+        // 아이콘 개별 스프링 애니메이션
+        gsap.from(icon, {
+            scale: 0,
+            rotation: -180,
+            duration: 1,
+            ease: "back.out(2)",
+            delay: 0.5
+        });
+
+        // 2. 마그네틱 마이크로-인터랙션 (Magnetic Inputs)
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                gsap.to(input, {
+                    scale: 1.02,
+                    duration: 0.4,
+                    ease: "back.out(3)"
+                });
+            });
+            input.addEventListener('blur', () => {
+                gsap.to(input, {
+                    scale: 1,
+                    duration: 0.4,
+                    ease: "elastic.out(1, 0.3)"
+                });
+            });
+        });
+
+        // 버튼 호버 스프링
+        btn.addEventListener('mouseenter', () => {
+            gsap.to(btn, {
+                y: -5,
+                scale: 1.05,
+                boxShadow: "0 10px 20px rgba(13, 110, 253, 0.3)",
+                duration: 0.4,
+                ease: "back.out(4)"
+            });
+        });
+        btn.addEventListener('mouseleave', () => {
+            gsap.to(btn, {
+                y: 0,
+                scale: 1,
+                boxShadow: "0 4px 6px rgba(13, 110, 253, 0.1)",
+                duration: 0.4,
+                ease: "elastic.out(1, 0.3)"
+            });
+        });
+
+        // 3. 피지컬 에러 쉐이크 (High-Frequency Shake)
+        form.addEventListener('submit', (e) => {
+            let isValid = true;
+            inputs.forEach(input => {
+                if (!input.value.trim()) isValid = false;
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+                // 폼이 "거부"를 표현하는 고주파 쉐이크
+                const tl = gsap.timeline();
+                tl.to(card, { x: -10, duration: 0.05 })
+                  .to(card, { x: 10, duration: 0.05 })
+                  .to(card, { x: -8, duration: 0.05 })
+                  .to(card, { x: 8, duration: 0.05 })
+                  .to(card, { x: -5, duration: 0.05 })
+                  .to(card, { x: 5, duration: 0.05 })
+                  .to(card, { x: 0, duration: 0.05 });
+                
+                // 버튼은 빨간색으로 일시적 반응
+                gsap.to(btn, { backgroundColor: "#dc3545", duration: 0.2, yoyo: true, repeat: 1 });
+            }
+        });
+    });
+</script>
 
 {{> layout/footer}}

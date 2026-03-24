@@ -1,7 +1,17 @@
 {{> layout/header}}
 
 <div class="container my-3">
-    <table class="table table-hover">
+    <!-- Overdrive: 실시간 검색 바 -->
+    <div class="d-flex justify-content-end mb-3">
+        <div class="input-group" style="max-width: 300px;">
+            <span class="input-group-text bg-white border-end-0">
+                <i class="fa-solid fa-magnifying-glass text-muted"></i>
+            </span>
+            <input type="text" id="search-input" class="form-control border-start-0" placeholder="제목 또는 내용 검색...">
+        </div>
+    </div>
+
+    <table class="table table-hover shadow-sm rounded overflow-hidden" id="board-table">
         <thead class="table-dark">
             <tr>
                 <th>번호</th>
@@ -10,9 +20,9 @@
                 <th>작성일</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="board-list-body">
             {{#model.boardList}}
-            <tr>
+            <tr class="board-row">
                 <td>{{id}}</td>
                 <td>{{title}}</td>
                 <td>{{username}}</td>
@@ -22,39 +32,158 @@
         </tbody>
     </table>
 
-    <!-- 페이징 UI -->
-    <ul class="pagination justify-content-center">
-        <!-- 이전 버튼 -->
-        <li class="page-item {{#model.pagination.isFirst}}disabled{{/model.pagination.isFirst}}">
-            <a class="page-link" href="?page={{model.pagination.prevPage}}">이전</a>
-        </li>
+    <!-- 페이징 UI 영역 (Overdrive 타겟) -->
+    <div id="pagination-area">
+        <ul class="pagination justify-content-center">
+            <!-- 이전 버튼 -->
+            <li class="page-item {{#model.pagination.isFirst}}disabled{{/model.pagination.isFirst}}">
+                <a class="page-link" href="?page={{model.pagination.prevPage}}">이전</a>
+            </li>
 
-        <!-- 앞쪽 ... 표시 -->
-        {{#model.pagination.showPrevDots}}
-        <li class="page-item disabled">
-            <span class="page-link">...</span>
-        </li>
-        {{/model.pagination.showPrevDots}}
+            <!-- 앞쪽 ... 표시 -->
+            {{#model.pagination.showPrevDots}}
+            <li class="page-item disabled">
+                <span class="page-link">...</span>
+            </li>
+            {{/model.pagination.showPrevDots}}
 
-        <!-- 페이지 번호 목록 -->
-        {{#model.pagination.pageNumbers}}
-        <li class="page-item {{#isCurrent}}active{{/isCurrent}}">
-            <a class="page-link" href="?page={{number}}">{{number}}</a>
-        </li>
-        {{/model.pagination.pageNumbers}}
+            <!-- 페이지 번호 목록 -->
+            {{#model.pagination.pageNumbers}}
+            <li class="page-item {{#isCurrent}}active{{/isCurrent}}">
+                <a class="page-link" href="?page={{number}}">{{number}}</a>
+            </li>
+            {{/model.pagination.pageNumbers}}
 
-        <!-- 뒤쪽 ... 표시 -->
-        {{#model.pagination.showNextDots}}
-        <li class="page-item disabled">
-            <span class="page-link">...</span>
-        </li>
-        {{/model.pagination.showNextDots}}
+            <!-- 뒤쪽 ... 표시 -->
+            {{#model.pagination.showNextDots}}
+            <li class="page-item disabled">
+                <span class="page-link">...</span>
+            </li>
+            {{/model.pagination.showNextDots}}
 
-        <!-- 다음 버튼 -->
-        <li class="page-item {{#model.pagination.isLast}}disabled{{/model.pagination.isLast}}">
-            <a class="page-link" href="?page={{model.pagination.nextPage}}">다음</a>
-        </li>
-    </ul>
+            <!-- 다음 버튼 -->
+            <li class="page-item {{#model.pagination.isLast}}disabled{{/model.pagination.isLast}}">
+                <a class="page-link" href="?page={{model.pagination.nextPage}}">다음</a>
+            </li>
+        </ul>
+    </div>
 </div>
+
+<!-- ──────────── ⚡ OVERDRIVE SCRIPT ───────────── -->
+<style>
+    /* View Transitions 효과 커스터마이징 */
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+        animation-duration: 0.3s;
+        animation-timing-function: ease-in-out;
+    }
+
+    /* 새로운 데이터 로드 시 행 애니메이션 */
+    .board-row {
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    @starting-style {
+        .board-row {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+    }
+</style>
+
+<script>
+    const searchInput = document.getElementById('search-input');
+    const boardListBody = document.getElementById('board-list-body');
+    const paginationArea = document.getElementById('pagination-area');
+    let debounceTimer;
+
+    // 실시간 검색 이벤트 리스너
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            fetchBoardList(1, e.target.value);
+        }, 300); // 300ms 디바운스
+    });
+
+    async function fetchBoardList(page, keyword = '') {
+        const url = `/api/board/search?page=${page}&keyword=${encodeURIComponent(keyword)}`;
+        
+        try {
+            const response = await fetch(url);
+            const result = await response.json();
+            
+            if (result.status === 200) {
+                // View Transitions API가 지원되는 경우 활용
+                if (document.startViewTransition) {
+                    document.startViewTransition(() => updateUI(result.body));
+                } else {
+                    updateUI(result.body);
+                }
+            }
+        } catch (error) {
+            console.error('검색 중 오류 발생:', error);
+        }
+    }
+
+    function updateUI(data) {
+        // 1. 테이블 본문 업데이트
+        let listHtml = '';
+        if (data.boardList.length === 0) {
+            listHtml = '<tr><td colspan="4" class="text-center py-4 text-muted">검색 결과가 없습니다.</td></tr>';
+        } else {
+            data.boardList.forEach(board => {
+                listHtml += `
+                    <tr class="board-row">
+                        <td>${board.id}</td>
+                        <td>${board.title}</td>
+                        <td>${board.username}</td>
+                        <td>${board.createdAt}</td>
+                    </tr>
+                `;
+            });
+        }
+        boardListBody.innerHTML = listHtml;
+
+        // 2. 페이징 UI 업데이트
+        const p = data.pagination;
+        let paginationHtml = '<ul class="pagination justify-content-center">';
+        
+        // 이전 버튼
+        paginationHtml += `
+            <li class="page-item ${p.isFirst ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="fetchBoardList(${p.prevPage}, '${searchInput.value}'); return false;">이전</a>
+            </li>
+        `;
+
+        // 앞쪽 ...
+        if (p.showPrevDots) {
+            paginationHtml += '<li class="page-item disabled"><span class="page-link">...</span></li>';
+        }
+
+        // 페이지 번호
+        p.pageNumbers.forEach(num => {
+            paginationHtml += `
+                <li class="page-item ${num.isCurrent ? 'active' : ''}">
+                    <a class="page-link" href="#" onclick="fetchBoardList(${num.number}, '${searchInput.value}'); return false;">${num.number}</a>
+                </li>
+            `;
+        });
+
+        // 뒤쪽 ...
+        if (p.showNextDots) {
+            paginationHtml += '<li class="page-item disabled"><span class="page-link">...</span></li>';
+        }
+
+        // 다음 버튼
+        paginationHtml += `
+            <li class="page-item ${p.isLast ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="fetchBoardList(${p.nextPage}, '${searchInput.value}'); return false;">다음</a>
+            </li>
+        `;
+
+        paginationHtml += '</ul>';
+        paginationArea.innerHTML = paginationHtml;
+    }
+</script>
 
 {{> layout/footer}}
